@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:english_words/english_words.dart';
 
 main() {
   runApp(MyApp());
@@ -11,8 +12,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      initialRoute: "/",
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: RouterTestRoute(),
+      routes: {
+        "new_page": (context) => NewRoute(),
+        "EchoRoute": (context) => EchoRoute(),
+        "RouterTestRoute": (context) => RouterTestRoute(),
+        "tip2": (context) {
+          return TipRoute(
+            text: ModalRoute.of(context).settings.arguments,
+          );
+        },
+        "/": (context) => MyHomePage(
+              title: "flutter demo home page",
+            )
+      },
     );
   }
 }
@@ -57,11 +71,11 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text("open new route"),
               textColor: Colors.blue,
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return NewRoute();
-                }));
+                Navigator.of(context)
+                    .pushNamed("EchoRoute", arguments: "hihih");
               },
-            )
+            ),
+            RandomWordsWidget(),
           ],
         ),
       ),
@@ -134,19 +148,46 @@ class RouterTestRoute extends StatelessWidget {
           child: RaisedButton(
             textColor: Colors.yellow,
             onPressed: () async {
-              var result = await Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return TipRoute(
-                    text: "我是提示哈哈哈",
-                  );
-                },
-              ));
+              var result = await Navigator.pushNamed(context, "tip2",
+                  arguments: "caocaocao");
               print("路由返回值$result");
             },
             child: Text("打开提示页"),
           ),
         ),
       ),
+    );
+  }
+}
+
+class EchoRoute extends StatelessWidget {
+  EchoRoute({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var args = ModalRoute.of(context).settings.arguments;
+    // TODO: implement build
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("EchoRoute"),
+      ),
+      body: Center(
+        child: Text("This is EchoRoutee ------------$args"),
+      ),
+    );
+  }
+}
+
+class RandomWordsWidget extends StatelessWidget {
+  RandomWordsWidget({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    final wordPair = new WordPair.random();
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: new Text(wordPair.toString()),
     );
   }
 }
