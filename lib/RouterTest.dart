@@ -12,21 +12,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      initialRoute: "/",
+//      initialRoute: "/",
       theme: ThemeData(primarySwatch: Colors.blue),
-      routes: {
-        "new_page": (context) => NewRoute(),
-        "EchoRoute": (context) => EchoRoute(),
-        "RouterTestRoute": (context) => RouterTestRoute(),
-        "tip2": (context) {
-          return TipRoute(
-            text: ModalRoute.of(context).settings.arguments,
-          );
-        },
-        "/": (context) => MyHomePage(
-              title: "flutter demo home page",
-            )
-      },
+//      routes: {
+//        "new_page": (context) => NewRoute(),
+//        "EchoRoute": (context) => EchoRoute(),
+//        "RouterTestRoute": (context) => RouterTestRoute(),
+//        "tip2": (context) {
+//          return TipRoute(
+//            text: ModalRoute.of(context).settings.arguments,
+//          );
+//        },
+//        "/": (context) => MyHomePage(
+//              title: "flutter demo home page",
+//            )
+//      },
+      home: Echo(text: "hahah"),
     );
   }
 }
@@ -188,6 +189,25 @@ class RandomWordsWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: new Text(wordPair.toString()),
+    );
+  }
+}
+
+class Echo extends StatelessWidget {
+  final String text;
+  final Color backgroundColor;
+
+  Echo({Key key, @required this.text, this.backgroundColor: Colors.grey})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Center(
+      child: Container(
+        color: backgroundColor,
+        child: Text(text),
+      ),
     );
   }
 }

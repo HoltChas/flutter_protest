@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: GetContext(),
     );
   }
 }
@@ -121,6 +121,116 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+//state生命周期
+class CounterWidget extends StatefulWidget {
+  final int initValue;
+
+  CounterWidget({Key key, this.initValue: 0}) : super(key: key);
+
+  @override
+  _CounterWidgetState createState() {
+    return _CounterWidgetState();
+  }
+}
+
+class _CounterWidgetState extends State<CounterWidget> {
+  int _counter;
+
+  @override
+  void initState() {
+    super.initState();
+    _counter = widget.initValue;
+    print("init");
+  }
+
+  @override
+  void reassemble() {
+    // TODO: implement reassemble
+    super.reassemble();
+    print("reassemble");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print("dispose");
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print("didChangeDependencies");
+  }
+
+  @override
+  void didUpdateWidget(CounterWidget oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    print("didUpdateWidget");
+  }
+
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
+    print("deactivate");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print("build");
+    // TODO: implement build
+    return Scaffold(
+      body: Center(
+        child: FlatButton(
+          child: Text("$_counter"),
+          onPressed: () => setState(() => ++_counter),
+        ),
+      ),
+    );
+  }
+}
+
+class GetContext extends StatefulWidget {
+  GetContext({Key key}) : super(key: key);
+
+  @override
+  _GetContextState createState() {
+    return _GetContextState();
+  }
+}
+
+class _GetContextState extends State<GetContext> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("子树中获取state对象"),
+      ),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () {
+          ScaffoldState _state = context.findAncestorStateOfType<ScaffoldState>();
+          _state.showSnackBar(SnackBar(content: Text("我是snackbar"),));
+          },child: Text("显示SnackBar"),
+        ),
+      ),
     );
   }
 }
