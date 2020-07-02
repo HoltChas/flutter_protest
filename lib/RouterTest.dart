@@ -11,9 +11,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+        title: 'Flutter Demo',
 //      initialRoute: "/",
-      theme: ThemeData(primarySwatch: Colors.blue),
+        theme: ThemeData(primarySwatch: Colors.blue),
 //      routes: {
 //        "new_page": (context) => NewRoute(),
 //        "EchoRoute": (context) => EchoRoute(),
@@ -27,8 +27,15 @@ class MyApp extends StatelessWidget {
 //              title: "flutter demo home page",
 //            )
 //      },
-      home: Echo(text: "hahah"),
-    );
+        home:
+        sbflutter()
+//      Scaffold(
+//        appBar: AppBar(
+//          title: Text("haha"),
+//        ),
+//        body: SwitchAndCheckBoxTestRoute(),
+//      ),
+        );
   }
 }
 
@@ -208,6 +215,447 @@ class Echo extends StatelessWidget {
         color: backgroundColor,
         child: Text(text),
       ),
+    );
+  }
+}
+
+//TapboxA 管理自身状态
+
+class TapboxA extends StatefulWidget {
+  TapboxA({Key key}) : super(key: key);
+
+  @override
+  _TapboxAState createState() {
+    return _TapboxAState();
+  }
+}
+
+class _TapboxAState extends State<TapboxA> {
+  bool _active = false;
+
+  void _handleTap() {
+    setState(() {
+      _active = !_active;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return new GestureDetector(
+      onTap: _handleTap,
+      child: new Container(
+        child: new Center(
+          child: new Text(
+            _active ? "active" : "inactive",
+            style: new TextStyle(fontSize: 32, color: Colors.white),
+          ),
+        ),
+        width: 200,
+        height: 200,
+        decoration: new BoxDecoration(
+            color: _active ? Colors.lightGreen[700] : Colors.grey[600]),
+      ),
+    );
+  }
+}
+
+//ParentWidget为TapboxB 管理状态
+class ParentWidget extends StatefulWidget {
+  ParentWidget({Key key}) : super(key: key);
+
+  @override
+  _ParentWidgetState createState() {
+    return _ParentWidgetState();
+  }
+}
+
+class _ParentWidgetState extends State<ParentWidget> {
+  bool _active = false;
+
+  void _handleTapboxChange(bool newValue) {
+    setState(() {
+      _active = newValue;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return new Container(
+      child: new TapboxB(
+        active: _active,
+        onChanged: _handleTapboxChange,
+      ),
+    );
+  }
+}
+
+class TapboxB extends StatelessWidget {
+  final bool active;
+  final ValueChanged<bool> onChanged;
+
+  void _handleTap() {
+    onChanged(!active);
+  }
+
+  TapboxB({Key key, this.active, this.onChanged}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return new GestureDetector(
+      onTap: _handleTap,
+      child: new Container(
+        child: new Center(
+          child: new Text(
+            active ? "Active" : "Inactive",
+            style: new TextStyle(fontSize: 32.0, color: Colors.white),
+          ),
+        ),
+        width: 200,
+        height: 200,
+        decoration: new BoxDecoration(
+            color: active ? Colors.lightGreen[700] : Colors.grey[600]),
+      ),
+    );
+  }
+}
+
+class ParentWidgetC extends StatefulWidget {
+  ParentWidgetC({Key key}) : super(key: key);
+
+  @override
+  _ParentWidgetCState createState() {
+    return _ParentWidgetCState();
+  }
+}
+
+class _ParentWidgetCState extends State<ParentWidgetC> {
+  bool _active = false;
+
+  void _handlerTapboxChanged(bool newValue) {
+    setState(() {
+      _active = newValue;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return new Container(
+        child: new TapboxC(active: _active, onChange: _handlerTapboxChanged));
+  }
+}
+
+//===========================Tapboxc===============================
+class TapboxC extends StatefulWidget {
+  final bool active;
+  final ValueChanged<bool> onChange;
+
+  TapboxC({Key key, this.active, @required this.onChange}) : super(key: key);
+
+  @override
+  _TapboxCState createState() {
+    return _TapboxCState();
+  }
+}
+
+class _TapboxCState extends State<TapboxC> {
+  bool _highlight = false;
+
+  void _handleTapDown(TapDownDetails details) {
+    setState(() {
+      _highlight = true;
+    });
+  }
+
+  void _handleTapUp(TapUpDetails details) {
+    setState(() {
+      _highlight = false;
+    });
+  }
+
+  void _handleTapCancel() {
+    setState(() {
+      _highlight = false;
+    });
+  }
+
+  void _handleTap() {
+    widget.onChange(!widget.active);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return new GestureDetector(
+      onTapDown: _handleTapDown,
+      onTapUp: _handleTapUp,
+      onTap: _handleTap,
+      onTapCancel: _handleTapCancel,
+      child: new Container(
+        child: new Text(
+          widget.active ? 'Active' : 'Inactive',
+          style: TextStyle(fontSize: 32, color: Colors.white),
+        ),
+        width: 200,
+        height: 200,
+        decoration: new BoxDecoration(
+            color: widget.active ? Colors.lightGreen[700] : Colors.grey[600],
+            border: _highlight
+                ? new Border.all(color: Colors.teal[700], width: 10)
+                : null),
+      ),
+    );
+  }
+}
+
+class CupertinoTestRoute extends StatelessWidget {
+  CupertinoTestRoute({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text("Cupertino Demo"),
+      ),
+      child: Center(
+        child: CupertinoButton(
+          color: CupertinoColors.activeBlue,
+          child: Text("Press"),
+          onPressed: () {},
+        ),
+      ),
+    );
+  }
+}
+
+//单选开关和复选框
+class SwitchAndCheckBoxTestRoute extends StatefulWidget {
+  SwitchAndCheckBoxTestRoute({Key key}) : super(key: key);
+
+  @override
+  _SwitchAndCheckBoxTestRouteState createState() {
+    return _SwitchAndCheckBoxTestRouteState();
+  }
+}
+
+class _SwitchAndCheckBoxTestRouteState
+    extends State<SwitchAndCheckBoxTestRoute> {
+  bool _switchSelected = true; //维护单选开关的状态
+  bool _checkboxSelected = true; //维护复选框状态
+  TextEditingController _unameController = new TextEditingController();
+
+  @override
+  void initState() {
+    _unameController.addListener(() {
+      print("我变化了哦嘿嘿" + _unameController.text);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Column(
+      children: <Widget>[
+        Switch(
+          value: _switchSelected,
+          onChanged: (value) {
+            //重新构建页面
+            setState(() {
+              _switchSelected = value;
+            });
+          },
+        ),
+        Checkbox(
+          value: _checkboxSelected,
+          activeColor: Colors.red,
+          onChanged: (value) {
+            setState(() {
+              _checkboxSelected = value;
+            });
+          },
+        ),
+        TextField(
+          autofocus: true,
+          decoration: InputDecoration(
+              labelText: "UserName",
+              hintText: "UserName or email",
+              prefixIcon: Icon(Icons.person)),
+          controller: _unameController,
+        ),
+        TextField(
+          decoration: InputDecoration(
+              labelText: "password",
+              hintText: "your password",
+              prefixIcon: Icon(Icons.lock)),
+          obscureText: true,
+        ),
+        RaisedButton(
+          child: Text("commit"),
+          onPressed: () {
+            print(_unameController.text);
+          },
+        )
+      ],
+    );
+  }
+}
+
+//焦点控制
+class _FocusTestRouteState extends StatefulWidget {
+  _FocusTestRouteState({Key key}) : super(key: key);
+
+  @override
+  __FocusTestRouteStateState createState() {
+    return __FocusTestRouteStateState();
+  }
+}
+
+class __FocusTestRouteStateState extends State<_FocusTestRouteState> {
+  FocusNode focusNode1 = new FocusNode();
+  FocusNode focusNode2 = new FocusNode();
+  FocusScopeNode focusScopeNode;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Padding(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        children: <Widget>[
+          TextField(
+            autofocus: true,
+            focusNode: focusNode1,
+            decoration: InputDecoration(labelText: "input1"),
+          ),
+          TextField(
+            focusNode: focusNode2,
+            decoration: InputDecoration(labelText: "input2"),
+          ),
+          Builder(builder: (sb) {
+            return Column(
+              children: <Widget>[
+                RaisedButton(
+                  child: Text("移动焦点"),
+                  onPressed: () {
+                    if (focusScopeNode == null) {
+                      focusScopeNode = FocusScope.of(context);
+                    }
+                    focusScopeNode.requestFocus(focusNode2);
+                  },
+                ),
+                RaisedButton(
+                  child: Text("隐藏键盘"),
+                  onPressed: () {
+                    focusNode1.unfocus();
+                    focusNode2.unfocus();
+                  },
+                )
+              ],
+            );
+          })
+        ],
+      ),
+    );
+  }
+}
+
+class sbflutter extends StatefulWidget {
+  sbflutter({Key key}) : super(key: key);
+
+  @override
+  _sbflutterState createState() {
+    return _sbflutterState();
+  }
+}
+
+class _sbflutterState extends State<sbflutter> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("shabi"),
+      ),
+      body: Container(
+        child: TextField(
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+              labelText: "email",
+              hintText: "电子邮件",
+              prefixIcon: Icon(Icons.email),
+              border: InputBorder.none),
+        ),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.grey[200],width: 1))
+        ),
+      ),
+//      body: Theme(
+//          data: Theme.of(context).copyWith(
+//              hintColor: Colors.grey[200],
+//              inputDecorationTheme: InputDecorationTheme(
+//                  labelStyle: TextStyle(color: Colors.grey),
+//                  hintStyle: TextStyle(color: Colors.grey, fontSize: 14.0))),
+//          child: Column(
+//            children: <Widget>[
+//              TextField(
+//                decoration: InputDecoration(
+//                    labelText: "用户名",
+//                    hintText: "用户名或邮箱",
+//                    prefixIcon: Icon(Icons.person)),
+//              ),
+//              TextField(
+//                decoration: InputDecoration(
+//                    prefixIcon: Icon(Icons.lock),
+//                    labelText: "密码",
+//                    hintText: "您的登录密码",
+//                    hintStyle: TextStyle(color: Colors.grey, fontSize: 13)),
+//              )
+//            ],
+//          )),
     );
   }
 }
