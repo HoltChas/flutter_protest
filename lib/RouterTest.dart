@@ -27,8 +27,7 @@ class MyApp extends StatelessWidget {
 //              title: "flutter demo home page",
 //            )
 //      },
-        home:
-        sbflutter()
+        home: sbflutter()
 //      Scaffold(
 //        appBar: AppBar(
 //          title: Text("haha"),
@@ -630,8 +629,8 @@ class _sbflutterState extends State<sbflutter> {
               border: InputBorder.none),
         ),
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey[200],width: 1))
-        ),
+            border:
+                Border(bottom: BorderSide(color: Colors.grey[200], width: 1))),
       ),
 //      body: Theme(
 //          data: Theme.of(context).copyWith(
@@ -656,6 +655,77 @@ class _sbflutterState extends State<sbflutter> {
 //              )
 //            ],
 //          )),
+    );
+  }
+}
+
+class FormTestRoute extends StatefulWidget {
+  FormTestRoute({Key key}) : super(key: key);
+
+  @override
+  _FormTestRouteState createState() {
+    return _FormTestRouteState();
+  }
+}
+
+class _FormTestRouteState extends State<FormTestRoute> {
+  TextEditingController _usernameController = new TextEditingController();
+  TextEditingController _pwdController = new TextEditingController();
+  GlobalKey _formkey = new GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Form Test"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        child: Form(
+          key: _formkey,
+          autovalidate: true,
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                autofocus: true,
+                controller: _usernameController,
+                decoration: InputDecoration(
+                    labelText: "用户名",
+                    hintText: "用户名或邮箱",
+                    icon: Icon(Icons.person)),
+                validator: (v) {
+                  return v.trim().length > 0 ? null : "用户名不能为空";
+                },
+              ),
+              TextFormField(
+                controller: _pwdController,
+                decoration: InputDecoration(
+                    labelText: "密码",
+                    hintText: "您的登录密码",
+                    icon: Icon(Icons.lock)),
+                obscureText: true,
+                validator: (v) {
+                  return v.trim().length > 5 ? null : "密码不能少于6位";
+                },
+              ),
+              //登录按钮
+              Padding(
+                padding: const EdgeInsets.only(top: 28.0),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(child: RaisedButton(
+                      padding: EdgeInsets.all(15),
+                      child: Text("登录"),
+                      color: Theme.of(context),
+                    ),)
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
