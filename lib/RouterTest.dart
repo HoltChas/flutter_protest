@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
 //              title: "flutter demo home page",
 //            )
 //      },
-        home: sbflutter()
+        home: ScrollControllerTestRoute()
 //      Scaffold(
 //        appBar: AppBar(
 //          title: Text("haha"),
@@ -714,11 +714,22 @@ class _FormTestRouteState extends State<FormTestRoute> {
                 padding: const EdgeInsets.only(top: 28.0),
                 child: Row(
                   children: <Widget>[
-                    Expanded(child: RaisedButton(
-                      padding: EdgeInsets.all(15),
-                      child: Text("登录"),
-                      color: Theme.of(context),
-                    ),)
+                    Expanded(child: Builder(
+                      builder: (context) {
+                        return RaisedButton(
+                          padding: EdgeInsets.all(15),
+                          child: Text("登录"),
+                          color: Theme.of(context).primaryColor,
+                          textColor: Colors.white,
+                          onPressed: () {
+                            if ((_formkey.currentState as FormState)
+                                .validate()) {
+                              print("验证通过");
+                            }
+                          },
+                        );
+                      },
+                    ))
                   ],
                 ),
               )
@@ -726,6 +737,678 @@ class _FormTestRouteState extends State<FormTestRoute> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class FlexLayoutTestRoute extends StatelessWidget {
+  FlexLayoutTestRoute({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Column(
+      children: <Widget>[
+        Flex(
+          direction: Axis.horizontal,
+          children: <Widget>[
+            Expanded(flex: 1, child: Container(height: 30, color: Colors.red)),
+            Expanded(
+              flex: 2,
+              child: Container(
+                height: 30,
+                color: Colors.green,
+              ),
+            )
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: SizedBox(
+            height: 100,
+            child: Flex(
+              direction: Axis.vertical,
+              children: <Widget>[
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    height: 30,
+                    color: Colors.red,
+                  ),
+                ),
+                Spacer(
+                  flex: 1,
+                ),
+                Expanded(
+                    flex: 1, child: Container(height: 30, color: Colors.green))
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class WrapRoute extends StatelessWidget {
+  WrapRoute({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("hahh"),
+      ),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 4.0,
+              alignment: WrapAlignment.center,
+              children: <Widget>[
+                new Chip(
+                  label: new Text("Hamilton"),
+                  avatar: new CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    child: Text("A"),
+                  ),
+                ),
+                new Chip(
+                  label: new Text("Lafayette"),
+                  avatar: new CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    child: Text("M"),
+                  ),
+                ),
+                new Chip(
+                  label: new Text("Muligan"),
+                  avatar: new CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    child: Text("H"),
+                  ),
+                ),
+                new Chip(
+                  avatar: new CircleAvatar(
+                      backgroundColor: Colors.blue, child: Text("J")),
+                  label: new Text("Laurens"),
+                )
+              ],
+            ),
+            Flow(
+              delegate: TestFlowDelegate(EdgeInsets.all(10)),
+              children: <Widget>[
+                new Container(
+                  width: 80,
+                  height: 80,
+                  color: Colors.red,
+                ),
+                new Container(
+                  width: 80,
+                  height: 80,
+                  color: Colors.green,
+                ),
+                new Container(
+                  width: 80,
+                  height: 80,
+                  color: Colors.blue,
+                ),
+                new Container(
+                  width: 80,
+                  height: 80,
+                  color: Colors.yellow,
+                ),
+                new Container(
+                  width: 80,
+                  height: 80,
+                  color: Colors.brown,
+                ),
+                new Container(
+                  width: 80,
+                  height: 80,
+                  color: Colors.purple,
+                ),
+              ],
+            ),
+//            PaddingTestRoute(),
+//            ConstrainedBoxRoute(),
+//            DecoratedBox(
+//              decoration: BoxDecoration(
+//                  gradient:
+//                      LinearGradient(colors: [Colors.red, Colors.orange[700]]),
+//                  borderRadius: BorderRadius.circular(3),
+//                  boxShadow: [
+//                    BoxShadow(
+//                        color: Colors.black54,
+//                        offset: Offset(2, 2),
+//                        blurRadius: 4)
+//                  ]),
+//              child: Padding(
+//                padding: EdgeInsets.symmetric(horizontal: 80, vertical: 18),
+//                child: Text(
+//                  "Login",
+//                  style: TextStyle(color: Colors.white),
+//                ),
+//              ),
+////
+            Container(
+              margin: EdgeInsets.all(20),
+              color: Colors.orange,
+              child: Text("hello world"),
+            ),
+            Container(
+              padding: EdgeInsets.all(20),
+              color: Colors.orange,
+              child: Text("hello world"),
+            ),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: DecoratedBox(
+                decoration: BoxDecoration(color: Colors.orange),
+                child: Text("hello world"),
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(color: Colors.orange),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text("Hello world"),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TestFlowDelegate extends FlowDelegate {
+  EdgeInsets margin = EdgeInsets.zero;
+
+  TestFlowDelegate(this.margin);
+
+  @override
+  void paintChildren(FlowPaintingContext context) {
+    // TODO: implement paintChildren
+    var x = margin.left;
+    var y = margin.top;
+    for (int i = 0; i < context.childCount; i++) {
+      var w = context.getChildSize(i).width + x + margin.right;
+      if (w < context.size.width) {
+        context.paintChild(i,
+            transform: new Matrix4.translationValues(x, y, 0));
+        x = w + margin.left;
+      } else {
+        x = margin.left;
+        y += context.getChildSize(i).height + margin.top + margin.bottom;
+        context.paintChild(i,
+            transform: new Matrix4.translationValues(x, y, 0));
+        x += context.getChildSize(i).width + margin.left + margin.right;
+      }
+    }
+  }
+
+  @override
+  Size getSize(BoxConstraints constraints) {
+    // TODO: implement getSize
+    return Size(double.infinity, 200);
+  }
+
+  @override
+  bool shouldRepaint(FlowDelegate delegate) {
+    {
+      // TODO: implement shouldRepaint
+      return delegate != this;
+    }
+  }
+}
+
+class ConstrainedRoute extends StatelessWidget {
+  ConstrainedRoute({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("hehe"),
+      ),
+      body: ConstrainedBox(
+        constraints: BoxConstraints.expand(),
+        child: Stack(
+          alignment: Alignment.center,
+          fit: StackFit.expand,
+          children: <Widget>[
+            Positioned(
+              child: Text("I am jack"),
+              left: 18,
+            ),
+            Container(
+              child: Text(
+                "hello world",
+                style: TextStyle(color: Colors.white),
+              ),
+              color: Colors.red,
+            ),
+            Positioned(
+              top: 18,
+              child: Text("your friend"),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class PaddingTestRoute extends StatelessWidget {
+  PaddingTestRoute({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Padding(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Text("hello world"),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text("i am jack"),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+            child: Text("Your friend"),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//==================ConstrainedBox=====================
+class ConstrainedBoxRoute extends StatelessWidget {
+  ConstrainedBoxRoute({Key key}) : super(key: key);
+  Widget redBox = DecoratedBox(
+    decoration: BoxDecoration(color: Colors.red),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: double.infinity,
+        minHeight: 10,
+      ),
+      child: Container(
+        height: 5,
+        child: redBox,
+      ),
+    );
+  }
+}
+//==================SingleChildScrollViewTestRoute============
+
+class SingleChildScrollViewTestRoute extends StatelessWidget {
+  String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+  SingleChildScrollViewTestRoute({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scrollbar(
+        child: Center(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.all(16),
+        child: Center(
+          child: Column(
+            children: str
+                .split("")
+                .map((e) => Text(
+                      e,
+                      textScaleFactor: 2.0,
+                    ))
+                .toList(),
+          ),
+        ),
+      ),
+    ));
+  }
+}
+
+class ListViewRoute extends StatelessWidget {
+  ListViewRoute({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container(
+        child: ListView.builder(
+      itemCount: 100,
+      itemExtent: 50,
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          title: Text("$index"),
+        );
+      },
+    ));
+  }
+}
+
+class ListView3 extends StatelessWidget {
+  ListView3({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    Widget divider1 = Divider(
+      color: Colors.blue,
+    );
+    Widget divider2 = Divider(color: Colors.green);
+    return ListView.separated(
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            title: Text("$index"),
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return index % 2 == 0 ? divider1 : divider2;
+        },
+        itemCount: 100);
+  }
+}
+
+class InfiniteListView extends StatefulWidget {
+  InfiniteListView({Key key}) : super(key: key);
+
+  @override
+  _InfiniteListViewState createState() {
+    return _InfiniteListViewState();
+  }
+}
+
+class _InfiniteListViewState extends State<InfiniteListView> {
+  static const loadingTag = "loading"; //尾部标记
+  var _words = <String>[loadingTag];
+
+  @override
+  void initState() {
+    _retrieveData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return ListView.separated(
+        itemBuilder: (context, index) {
+          if (_words[index] == loadingTag) {
+            if (_words.length - 1 < 100) {
+              _retrieveData();
+              return Container(
+                padding: const EdgeInsets.all(16),
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                  ),
+                ),
+              );
+            } else {
+              return Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  "没有更多了",
+                  style: TextStyle(color: Colors.grey),
+                ),
+              );
+            }
+          }
+          return ListTile(
+            title: Text(_words[index]),
+          );
+        },
+        separatorBuilder: (context, index) => Divider(
+              height: .0,
+            ),
+        itemCount: _words.length);
+  }
+
+  void _retrieveData() {
+    Future.delayed(Duration(seconds: 2)).then((value) {
+      _words.insertAll(_words.length - 1,
+          generateWordPairs().take(30).map((e) => e.asPascalCase).toList());
+      setState(() {});
+    });
+  }
+}
+
+class ListView4 extends StatelessWidget {
+  ListView4({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Column(
+      children: <Widget>[
+        ListTile(
+          title: Text("商品列表"),
+        ),
+        Expanded(
+          child:
+              ListView.builder(itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              title: Text("$index"),
+            );
+          }),
+        )
+      ],
+    );
+  }
+}
+
+class GridView1 extends StatelessWidget {
+  GridView1({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return GridView(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3, childAspectRatio: 1),
+      children: <Widget>[
+        Icon(Icons.ac_unit),
+        Icon(Icons.airport_shuttle),
+        Icon(Icons.all_inclusive),
+        Icon(Icons.beach_access),
+        Icon(Icons.cake),
+        Icon(Icons.free_breakfast)
+      ],
+    );
+  }
+}
+
+class InfiniteGridView extends StatefulWidget {
+  InfiniteGridView({Key key}) : super(key: key);
+
+  @override
+  _InfiniteGridViewState createState() {
+    return _InfiniteGridViewState();
+  }
+}
+
+class _InfiniteGridViewState extends State<InfiniteGridView> {
+  List<IconData> _icons = []; //保存icon数据
+  @override
+  void initState() {
+    _retrieveIcons();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3, childAspectRatio: 1),
+      itemCount: _icons.length,
+      itemBuilder: (context, index) {
+        if (index == _icons.length - 1 && _icons.length < 200) {
+          _retrieveIcons();
+        }
+        return Icon(_icons[index]);
+      },
+    );
+  }
+
+  void _retrieveIcons() {
+    Future.delayed(Duration(microseconds: 200)).then((value) {
+      setState(() {
+        _icons.addAll([
+          Icons.ac_unit,
+          Icons.airport_shuttle,
+          Icons.all_inclusive,
+          Icons.beach_access,
+          Icons.cake,
+          Icons.free_breakfast
+        ]);
+      });
+    });
+  }
+}
+
+class CustomScrollViewTestRoute extends StatelessWidget {
+  CustomScrollViewTestRoute({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Material(
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            pinned: true,
+            expandedHeight: 250,
+            flexibleSpace: FlexibleSpaceBar(
+              title: const Text("Demo"),
+              background: Image.asset(
+                "images/img.jpg",
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(8),
+            sliver: new SliverGrid(
+                delegate: new SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                  return new Container(
+                    alignment: Alignment.center,
+                    color: Colors.cyan[100 * (index % 9)],
+                    child: new Text("grid item $index"),
+                  );
+                }, childCount: 20),
+                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 4)),
+          ),
+          new SliverFixedExtentList(
+              delegate: new SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                return new Container(
+                  alignment: Alignment.center,
+                  color: Colors.lightGreen[100 * (index % 9)],
+                  child: new Text("list item $index"),
+                );
+              }, childCount: 50),
+              itemExtent: 50)
+        ],
+      ),
+    );
+  }
+}
+
+class ScrollControllerTestRoute extends StatefulWidget {
+  ScrollControllerTestRoute({Key key}) : super(key: key);
+
+  @override
+  _ScrollControllerTestRouteState createState() {
+    return _ScrollControllerTestRouteState();
+  }
+}
+
+class _ScrollControllerTestRouteState extends State<ScrollControllerTestRoute> {
+  ScrollController _controller = new ScrollController();
+  bool showToTopBtn = false;
+
+  @override
+  void initState() {
+    _controller.addListener(() {
+      print(_controller.offset);
+      if (_controller.offset < 1000 && showToTopBtn) {
+        setState(() {
+          showToTopBtn = false;
+        });
+      } else if (_controller.offset >= 1000 && showToTopBtn == false) {
+        setState(() {
+          showToTopBtn = true;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("滚动控制"),
+      ),
+      body: Scrollbar(
+        child: ListView.builder(
+            itemCount: 100,
+            itemExtent: 50,
+            controller: _controller,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text("$index"),
+              );
+            }),
+      ),
+      floatingActionButton: !showToTopBtn
+          ? null
+          : FloatingActionButton(
+              child: Icon(Icons.arrow_upward),
+              onPressed: () {
+                _controller.animateTo(.0,
+                    duration: Duration(milliseconds: 200), curve: Curves.ease);
+              },
+            ),
     );
   }
 }
